@@ -7,12 +7,19 @@ exports.upload = (request, response) => {
   console.log("Rozpoczynam obsługę żądania upload.");
   const form = new formidable.IncomingForm();
   form.parse(request, (error, fields, files) => {
-      fs.renameSync(files.upload.path, files.upload.name);
-      uploadFileName = files.upload.name;
-      response.writeHead(200, {"Content-Type": "text/html"});
-      response.write("received image:<br/>");
-      response.write("<img src='/show' />");
-      response.end();
+    
+      if (fields.title === '') {
+        uploadFileName = files.upload.name;
+      } else {
+        uploadFileName = `${fields.title}.${files.upload.name.slice(-3)}`;
+      }
+      
+      fs.renameSync(files.upload.path, uploadFileName);
+      fs.readFile('templates/upload.html', (err, html) => {
+        response.writeHead(200, {"Content-Type": "text/html; charset=utf-8"});
+        response.write(html);
+        response.end();
+    });
  });
 }
 
@@ -26,7 +33,6 @@ exports.welcome = (request, response) => {
 }
 
 exports.show = (request, response) => {
-  console.log(response)
   fs.readFile(uploadFileName, "binary", (error, file) => {
       response.writeHead(200, {"Content-Type": "image/png"});
       response.write(file, "binary");
