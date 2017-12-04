@@ -13,19 +13,24 @@ exports.upload = (request, response) => {
     fs.readFile('templates/upload.html', (err, html) => {
       response.writeHead(200, {"Content-Type": "text/html; charset=utf-8"});
       response.write(html);
-      response.write(`<img src="/show?name=${uploadFileName}">`);
+      // response.write(`<img src="show?name=${uploadFileName}">`);
       response.end();
   });
 
-      exports.show = (request, response) => {
-      fs.readFile(uploadFileName, "binary", (error, file) => {
-          response.writeHead(200, {"Content-Type": "image/png"});
-          response.write(file, "binary");
-          response.end();
-      });
-    }
+  exports.show = (request, response) => {
+    var parsedUrl = url.parse(request.url, true);
+    console.log(parsedUrl.pathname)
+    fs.readFile(parsedUrl.pathname, "binary", (error, file) => {
+        response.writeHead(200, {"Content-Type": "image/png"});
+        response.write(file, "binary");
+        response.end();
+    });
+  }
+      
   });
 }
+
+
 
 exports.welcome = (request, response) => {
   console.log("Rozpoczynam obsługę żądania welcome.");

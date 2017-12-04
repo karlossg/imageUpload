@@ -11,9 +11,9 @@ function start() {
     response.writeHead(200, {"Content-Type": "text/plain; charset=utf-8"});
 
     var parsedUrl = url.parse(request.url, true);
-    console.log(parsedUrl);
+    // console.log(parsedUrl.query.name);
 
-    switch (request.url) { 
+    switch (parsedUrl.path) { 
         case '/':
         case '/start':
             handlers.welcome(request, response);
