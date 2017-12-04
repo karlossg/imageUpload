@@ -1,5 +1,6 @@
 const fs = require('fs');
 const formidable = require('formidable');
+const url = require('url');
 
 exports.upload = (request, response) => {
   console.log("Rozpoczynam obsługę żądania upload.");
@@ -8,25 +9,16 @@ exports.upload = (request, response) => {
       
     const uploadFileName = fields.title ? `${fields.title}.${files.upload.name.slice(-3)}` : files.upload.name
               
-    fs.rename(files.upload.path, `${uploadFileName}`);
-    fs.readFile('templates/upload.html', (err, html) => {
+    fs.renameSync(files.upload.path, `${uploadFileName}`);
+    fs.readFile(files.upload.path, (err, html) => {
         response.writeHead(200, {"Content-Type": "text/html; charset=utf-8"});
-        response.write(html);
+        response.write('<head><link rel="stylesheet" type="text/css" href="style.css"></head>');
+        response.write('<h1>Received file</h1>');
+        response.write(`<img src="show?name=${uploadFileName}">`);
+
         response.end();
     });
-    
-
-    exports.show = (request, response) => {
-      fs.readFile(uploadFileName, "binary", (error, file) => {
-          response.writeHead(200, {"Content-Type": "image/png"});
-          response.write(file, "binary");
-          response.end();
-      });
-    }
-
- });
-
- 
+  });
 }
 
 exports.welcome = (request, response) => {
