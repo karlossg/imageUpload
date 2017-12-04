@@ -22,7 +22,7 @@ function start() {
             handlers.upload(request, response);
             break;
         case '/show':
-            handlers.show(request, response);
+            handlers.show(request, response, parsedUrl.query);
             break;
         case "/style.css" :
             handlers.style(request, response);
