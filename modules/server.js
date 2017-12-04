@@ -1,4 +1,5 @@
 const http = require('http');
+const url = require('url');
 const colors = require('colors');
 const handlers = require('./handlers');
 
@@ -8,6 +9,9 @@ function start() {
     console.log("Zapytanie " + request.url + " odebrane.");
 
     response.writeHead(200, {"Content-Type": "text/plain; charset=utf-8"});
+
+    var parsedUrl = url.parse(request.url, true);
+    console.log(parsedUrl);
 
     switch (request.url) { 
         case '/':
