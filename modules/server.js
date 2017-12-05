@@ -10,10 +10,10 @@ function start() {
 
     response.writeHead(200, {"Content-Type": "text/plain; charset=utf-8"});
 
-    var parsedUrl = url.parse(request.url, true);
-    // console.log(parsedUrl.query.name);
+    const parsedUrl = url.parse(request.url, true);
+    
 
-    switch (parsedUrl.path) { 
+    switch (parsedUrl.pathname) { 
         case '/':
         case '/start':
             handlers.welcome(request, response);
